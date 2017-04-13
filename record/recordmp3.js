@@ -60,6 +60,7 @@
     }
 
     this.exportWAV = function(cb, type){
+        
       currCallback = cb || config.callback;
       type = type || config.type || 'audio/wav';
       if (!currCallback) throw new Error('Callback not set');
@@ -83,8 +84,8 @@
         data = parseWav(buffer);
 
         console.log(data);
-		console.log("Converting to Mp3");
-		log.innerHTML += "\n" + "Converting to Mp3";
+		console.log("Processing your recording ...!");
+		log.innerHTML += "\n" + "Processing your recording ...";
 
         encoderWorker.postMessage({ cmd: 'init', config:{
             mode : 3,
@@ -98,9 +99,18 @@
         encoderWorker.onmessage = function(e) {
             if (e.data.cmd == 'data') {
 
+                                /*************************************
+                                 * GRB:Removing the below message as Bruce
+                                 * does not want MP3 messages to be shown
+                                 
 				console.log("Done converting to Mp3");
 				log.innerHTML += "\n" + "Done converting to Mp3";
-
+                                */ 
+                               
+                               console.log("Your recording is ready for playback!");
+			       log.innerHTML += "\n" + "Your recording is ready for playback!";
+                               console.log("Your can also save your recording if desired");
+			       log.innerHTML += "\n" + "Your can also save your recording if desired";
 				/*var audio = new Audio();
 				audio.src = 'data:audio/mp3;base64,'+encode64(e.data.buf);
 				audio.play();*/
@@ -111,6 +121,14 @@
 				// Commented out by GRB as we do this later uploadAudio(mp3Blob);
 
 				var url = 'data:audio/mp3;base64,'+encode64(e.data.buf);
+                                
+                                //*******************************************
+                                // Find the audio element and add the URL
+                                // as source to the audio element
+                                //********************************************
+                                 var player = document.getElementById("player");
+                                 player.src = url;
+                                
 				var li = document.createElement('li');
 				var au = document.createElement('audio');
 				var hf = document.createElement('a');
@@ -122,18 +140,19 @@
 				// as well as save it on the server
 				//***********************************************
 				var audioFileName = 'audio_recording_' + new Date().getTime() + '.mp3';
-				var cb = document.createElement("button");
+				var cb = document.createElement("INPUT");
+                                cb.setAttribute("type", "checkbox");
 				var t = document.createTextNode("Add to Cart");
-				cb.appendChild(t);
-				cb.setAttribute('id', audioFileName);
+				//cb.appendChild(t);
+				//cb.setAttribute('id', audioFileName);
 				cb.setAttribute('value', url);
-				cb.style.background = '#cccc00';
+				//cb.style.background = '#cccc00';
 				cb.onclick = function (){
 					                       //***********************************
-										   // GRB - This is the AddToCart button
-										   // handler. The recording and its 
-										   // identifier wil be added to the cart
-										   //*************************************
+							       // GRB - This is the AddToCart button
+							       // handler. The recording and its 
+							       // identifier wil be added to the cart
+							       //*************************************		 
 											
 											var btnClicked = event.target;
 											var id = btnClicked.id;
@@ -141,19 +160,7 @@
 											//log.innerHTML += "In AddToCart Handler via button = " + recId ;
 											//log.innerHTML += "Recording Content" + recContent;
 											
-											//****************************** ***
-											// Upload the content to the server
-											//*********************************
-											$.ajax({
-														type: 'POST',
-														url: 'upload.php',
-														data:{content: recContent, recId: id}
-														
-													}).done(function(data) {
-														//console.log(data);
-														
-														//log.innerHTML += "\n" + data;
-													});
+											
 																					
 											
 										};
@@ -172,11 +179,11 @@
 				
 				
 				
-				li.appendChild(au);
-				li.appendChild(hf);
-				li.appendChild(space);
-				li.append(cb);
-				recordingslist.appendChild(li);
+				//li.appendChild(au);
+				//li.appendChild(hf);
+				//li.appendChild(space);
+				//li.append(cb);
+				//recordingslist.appendChild(li);
 				
 				
 				
