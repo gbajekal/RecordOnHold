@@ -21,24 +21,14 @@ if (isset($_GET ))
 {
 	// read cookie and check if registered earlier
 	
-	if ( isUserRegistered() )
-	{
+	
 	   header("Location: ./record/record.php");
 		die();
      	   
 		
 		
-	}
-else
-	{
-		debugStr("No cookies set. User needs to register");
-		//renderRegistrationForm();
-		header("Location: ./register/register.php");
-		die();
 	
-	
-	} 
-	
+
 	
 	
 } 
