@@ -10,8 +10,17 @@ echo "Content=".$_POST['content'];
 
 
 $containerName = getUserName();
-$containerName = strtolower($containerName);
-$containerName = str_replace(' ', '', $containerName);
+if(empty($containerName))
+{
+    $containerName = strtolower($containerName);
+    $containerName = str_replace(' ', '', $containerName);
+}
+else
+{
+    // Temporary directory 
+    $containerName="tmp";
+}
+
 
 $folderName = "recordings/".$containerName;
 
@@ -58,17 +67,17 @@ fclose($fp);
 // Create the URL and add it to the Cookie
 // for further processing
 //***********************************************
-$cookie_name = 'shoppingCart';
+$cookie_name = 'recordings';
 if($DEBUG)
 	$recordingURL = 'https://'.$_SERVER['SERVER_NAME']."/recordonhold/record/".$folderName."/".$filename;
 else
 	$recordingURL = 'https://'.$_SERVER['SERVER_NAME']."/record/".$folderName."/".$filename;
 
  //*******************************
-    // ; delimited cookie to 
-	// store recording URLs on server
-	//********************************
-	$recordingURL = $_COOKIE[$cookie_name].$recordingURL .';';
+ // ; delimited cookie to 
+// store recording URLs on server
+//********************************
+	$recordingURL = $_COOKIE[$cookie_name].$recordingURL .',';
 	setcookie($cookie_name, $recordingURL, time() + (86400 * 30), "/");
 
 	
